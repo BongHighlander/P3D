@@ -5,6 +5,7 @@
 #include "lib_2d.h"
 #include "lib_3d.h"
 #include "lib_objet3d.h"
+#include "lib_scene3d.h"
 
 //#define T2D
 //#define T3D
@@ -29,7 +30,27 @@ int main(int argc,char** argv)
 #endif
 #ifdef O3D
     t_point3d *origine = definirPoint3d(0,0,0), *vecteur;
-    t_objet3d *o10 = damier(10, 10, 10, 10);
+    //t_objet3d *o9 = damier(10,10,10,10);
+    t_objet3d *o10 = arbre(50,10,50);
+    t_objet3d *o11 = parallelepipede(1000,1,1000,BLEUC);
+    t_objet3d *o12 = sphere_amiga(25,10,10);
+    t_objet3d *o13 = sphere(25,10,10);
+
+    translationObjet3d(o12,definirPoint3d(150,0,0));
+    translationObjet3d(o10,definirPoint3d(0,-50,0));
+    translationObjet3d(o11,definirPoint3d(0,50,0));
+    rotationObjet3d(o10,origine,10,10,10);
+    rotationObjet3d(o11,origine,10,10,10);
+    t_scene3d *s1 = definirScene3d(parallelepipede(100,1,100,ROUGEC));
+    t_scene3d *s2 = ajouter_relation(s1,o11);
+    t_scene3d *s3 = ajouter_relation(s2,o12);
+    t_scene3d *s4 = ajouter_relation(s1,o10);
+    t_scene3d *s5 = ajouter_relation(s3,o13);
+    translationScene3d(s3,definirPoint3d(2,0,0));
+    rotationScene3d(s3,origine,10,10,10);
+
+    //libererObjet3d(o9);
+
     //rotationObjet3d(o10, origine, 90, 0,0);
 #endif
 
@@ -39,7 +60,7 @@ int main(int argc,char** argv)
     timestart = SDL_GetTicks();
 
 
-    while(i<400)
+    while(i<200)
     {
         effacerFenetre(surface, 0);
 
@@ -71,11 +92,13 @@ int main(int argc,char** argv)
  * - continuer par les transformations
  * - finir par le tri des faces d'un objet et la composition des objets
  */
-        vecteur = definirPoint3d(sin(i*M_PI/180),cos(i*M_PI/180),0);
-        rotationObjet3d(o10,origine,1,1,0);
-        dessinerObjet3d(surface, o10);
-        free(vecteur);
-        SDL_Delay(15);
+        //vecteur = definirPoint3d(sin(i*M_PI/180),cos(i*M_PI/180),0);
+        //rotationObjet3d(o10,origine,1,1,0);
+        //dessinerObjet3d(surface, o10);
+        //free(vecteur);
+        //translationScene3d(s3,definirPoint3d(sin(i*M_PI/180),0,cos(i*M_PI/180)));
+        dessinerScene3d(surface,s1);
+        SDL_Delay(25);
 #endif
 
         majEcran(surface);
