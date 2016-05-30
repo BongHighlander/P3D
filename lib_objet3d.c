@@ -292,9 +292,15 @@ t_objet3d* cylindre(double hauteur,double largeur, double longi)
 t_objet3d* arbre(double lx, double ly, double lz)
 {
 	t_objet3d *pt_objet = NULL;
+	t_objet3d *pt_marron = NULL;
 
 	pt_objet = objet_vide();
-	// TODO
+	pt_marron = cylindre(lx,ly,10);
+	translationObjet3d(pt_marron,definirPoint3d(0,lx,0));
+	pt_objet = cone(lx,lz,10);
+	composerObjet3d(pt_objet,pt_marron);
+
+	libererObjet3d(pt_marron);
 
 	return pt_objet;
 
@@ -306,7 +312,7 @@ t_objet3d* damier(double lx, double lz, double nx, double nz)
 
 	pt_objet = objet_vide();
 	int i,j;
-	t_point3d *p0, *p1, *p2, *p3, *p4;
+	t_point3d *p0, *p1, *p2, *p3;
 	p0 = definirPoint3d(0,0,0);
 	p1 = definirPoint3d(lx,0,0);
 	p2 = definirPoint3d(0,0,lz);
@@ -316,27 +322,21 @@ t_objet3d* damier(double lx, double lz, double nx, double nz)
 	t_triangle3d *damier2 = definirTriangle3d(p3,p1,p2);
 
 	for(i=0;i<nx;i++) {
+            translationObjet3d(pt_objet,definirPoint3d(-lx*nx,0,0));
         for(j=0;j<nz;j++) {
-                p4 = definirPoint3d(i*lx,0,j*lz);
                 //translationTriangle3d(copierTriangle3d(damier1),p4)
                 //BLANC*((i+j)%2)+NOIR*((i+j+1)%2)
-                translationTriangle3d(damier1,p4);
-                translationTriangle3d(damier2,p4);
-                __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(damier1),MARRON2));
-                __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(damier2),MARRON1));
-                damier1 = definirTriangle3d(p0,p1,p2);
-                damier2 = definirTriangle3d(p3,p1,p2);
+                __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(damier1),BLANC*((i+j)%2)+NOIR*((i+j+1)%2)));
+                __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(damier2),BLANC*((i+j)%2)+NOIR*((i+j+1)%2)));
+                translationObjet3d(pt_objet,p1);
         }
+        translationObjet3d(pt_objet,p2);
 	}
-
-	free(p0);
-	free(p1);
-	free(p2);
-	free(p3);
-	free(p4);
+	translationObjet3d(pt_objet,definirPoint3d(-lx*nx*0.5,0,-lz*nz*0.5));
 
 	libererTriangle3d(damier1);
 	libererTriangle3d(damier2);
+
 
 	return pt_objet;
 
@@ -346,7 +346,13 @@ t_objet3d *copierObjet3d(t_objet3d *o) // attention, effectue une copie mirroir
 {
 	t_objet3d *n = objet_vide();
 
-	// TODO
+	t_maillon *o1 = o->tete;
+	while(o1!=NULL) {
+            __insere_tete(n,__cree_maillon(o1->face,o1->couleur));
+            o1 = o1->pt_suiv;
+	}
+
+
 
 	return n;
 }
@@ -355,7 +361,7 @@ void composerObjet3d(t_objet3d* o, t_objet3d* o2) /* o = o+o2, o2 ne signifiera 
 {
 	t_maillon *o1 = o2->tete;
 	while(o1!=NULL) {
-            __insere_tete(o,__cree_maillon(o1->face,o1->couleur));
+            __insere_tete(o,__cree_maillon(copierTriangle3d(o1->face),o1->couleur));
             o1 = o1->pt_suiv;
 	}
 
