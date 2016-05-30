@@ -33,12 +33,14 @@ t_objet3d* camera(); // == objet vide
 
 // retourne un object alloue mais avec une liste de 12 faces centrees sur (0,0,0) de dimension lx,ly,lz
 t_objet3d* parallelepipede(double lx, double ly, double lz);
-// retourne un object alloue mais avec une liste de 12 faces centrees sur (0,0,0) de dimension lx,ly,lz
-t_objet3d* parallelepipede2(double lx, double ly, double lz, Uint32 couleur);
 // retourne un object alloue mais avec une liste de faces centrees sur (0,0,0) de rayon r avec nlat latitudes et nlong longitudes
 t_objet3d* sphere(double r, double nlat, double nlong);
 // retourne un object alloue mais avec une liste de faces centrees sur (0,0,0) de rayon r avec nlat latitudes et nlong longitudes, prend des couleurs rouges et blanches sur des carres adjacents, cf google
 t_objet3d* sphere_amiga(double r, double nlat, double nlong);
+
+t_objet3d* cone(double hauteur,double largeur, double longi);
+
+t_objet3d* cylindre(double hauteur,double largeur, double longi);
 // retourne un object alloue mais avec une liste de faces centrees sur (0,0,0) : c'est un rectangle marron (plusieurs marrons possibles) et une pyramide au verte (plusieurs verts possibles) au sommet
 t_objet3d* arbre(double lx, double ly, double lz);
 // retourne un object alloue mais avec une liste de faces centrees sur (0,0,0) de taille lx,0,lz decoupe avec nx et nz carres alternativement noirs et blancs
@@ -54,16 +56,13 @@ void composerObjet3d(t_objet3d* o, t_objet3d* o2);
 // libere la memoire occupee par l'objet, attention il faut aussi liberer les faces de o
 void libererObjet3d(t_objet3d *o);
 
+void __insertion_tri(t_maillon *m1,t_objet3d *o1);
+
 // effectue une translation sur les faces de l'objet selon le vecteur donne en parametre
 void translationObjet3d(t_objet3d* pt_objet, t_point3d *vecteur);
 // effectue une rotation sur les faces de l'objet selon le vecteur donne en parametre
 void rotationObjet3d(t_objet3d* pt_objet, t_point3d *centre, float degreX, float degreY, float degreZ);
 // effectue une transformation arbitraire sur les faces de l'objet selon le vecteur donne en parametre, vous pourrez ensuite modifier les deux fonctions precedentes pour faire appel a cette fonction
 void transformationObjet3d(t_objet3d* pt_objet, double mat[4][4]);
-
-//copie une suite de maillons
-void copierchaine(t_maillon *m1, t_maillon *m2);
-//file des maillons
-void ajouterchaine(t_maillon *m1, t_maillon *m2);
 
 #endif

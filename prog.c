@@ -22,14 +22,14 @@ int main(int argc,char** argv)
     t_triangle2d *t1 = definirTriangle2d(p1, p2, p3);
 #endif
 #ifdef T3D
-    t_point3d *p10 = definirPoint3d(0,0,0), *p20 = definirPoint3d(50,50,50), *p30 = definirPoint3d(50,0,0);
+    t_point3d *p10 = definirPoint3d(10,50,100), *p20 = definirPoint3d(100,240,100), *p30 = definirPoint3d(50,300,100);
+    t_point3d *p11 = definirPoint3d(0,0,10);
     t_triangle3d *t10 = definirTriangle3d(p10, p20, p30);
+    t_triangle3d *t11 = copierTriangle3d(t10);
 #endif
 #ifdef O3D
-    //t_point3d *origine = definirPoint3d(0,0,0), *vecteur;
-    //t_objet3d *o10 = sphere_amiga(80, 8, 16);
-    t_objet3d *o1 = parallelepipede(200, 200, 200);
-    t_point3d *lol = definirVecteur3d(1,1,1);
+    t_point3d *origine = definirPoint3d(0,0,0), *vecteur;
+    t_objet3d *o10 = damier(10, 10, 10, 10);
     //rotationObjet3d(o10, origine, 90, 0,0);
 #endif
 
@@ -39,7 +39,7 @@ int main(int argc,char** argv)
     timestart = SDL_GetTicks();
 
 
-    while(i<100)
+    while(i<400)
     {
         effacerFenetre(surface, 0);
 
@@ -58,9 +58,10 @@ int main(int argc,char** argv)
  * - tester en activant le define T3D
  * - terminer avec les autres fonctions
  */
-        //rotationTriangle3d(t10, p10, 15, 15, 15); // rotation d'axe Y
-        remplirTriangle3d(surface, t10, echelle_de_couleur(30*i));
-        SDL_Delay(15);
+        //rotationTriangle3d(t11,p10,10,0,0); // rotation d'axe Y
+        translationTriangle3d(t11,p11);
+        remplirTriangle3d(surface, t11, echelle_de_couleur(30*i));
+        SDL_Delay(20);
 
 #endif
 #ifdef O3D
@@ -70,11 +71,11 @@ int main(int argc,char** argv)
  * - continuer par les transformations
  * - finir par le tri des faces d'un objet et la composition des objets
  */
-        //vecteur = definirPoint3d(sin(i*M_PI/180),cos(i*M_PI/180),0);
-        //translationObjet3d(o10, vecteur);
-        dessinerObjet3d(surface, o1);
-        translationObjet3d(o1, lol);
-        SDL_Delay(40);
+        vecteur = definirPoint3d(sin(i*M_PI/180),cos(i*M_PI/180),0);
+        rotationObjet3d(o10,origine,1,1,0);
+        dessinerObjet3d(surface, o10);
+        free(vecteur);
+        SDL_Delay(15);
 #endif
 
         majEcran(surface);
