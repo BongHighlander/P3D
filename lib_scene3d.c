@@ -11,14 +11,18 @@
 t_scene3d* definirScene3d(t_objet3d *pt_objet)
 {
 	t_scene3d* pt_maillon;
+	pt_maillon  = (t_scene3d*) malloc(sizeof(t_scene3d));
 	double m1[4][4] = {{1, 0, 0, 0},\
 			{0, 1, 0, 0},\
 			{0, 0, 1, 0},\
 			{0, 0, 0, 1}};
 
-	pt_maillon->objet = pt_objet;
+	pt_maillon->objet = copierObjet3d(pt_objet);
 	copierMatrice3d(pt_maillon->descendant,m1);
 	copierMatrice3d(pt_maillon->montant,m1);
+	pt_maillon->pt_fils = NULL;
+	pt_maillon->pt_pere = NULL;
+	pt_maillon->pt_suiv = NULL;
 
 
 	return pt_maillon;
@@ -63,27 +67,60 @@ void translationScene3d(t_scene3d *pt_scene, t_point3d *vecteur)
 
 void rotationScene3d(t_scene3d *pt_scene, t_point3d *centre, float degreX, float degreY, float degreZ)
 {
+    float dx,dy,dz;
+	dx=degreX*0.0175;
+	dy=degreY*0.0175;
+	dz=degreZ*0.0175;
 
-  // TODO
+	t_point3d *anticentre = definirPoint3d(-centre->xyzt[0], -centre->xyzt[1], -centre->xyzt[2]);
+	double m0[4][4];
+	copierMatrice3d(m0,pt_scene->descendant);
+
+	double mx[4][4]={{1, 0, 0, 0},\
+                    {0, cos(dx), -sin(dx), 0},\
+                    {0, sin(dx), cos(dx), 0},\
+                    {0, 0, 0, 1}};
+    double my[4][4]={{cos(dy), 0, -sin(dy), 0},\
+                    {0, 1, 0, 0},\
+                    {sin(dy), 0, cos(dy), 0},\
+                    {0, 0, 0, 1}};
+    double mz[4][4]={{cos(dz), -sin(dz), 0, 0},\
+                    {sin(dz), cos(dz), 0, 0},\
+                    {0, 0, 1, 0},\
+                    {0, 0, 0, 1}};
+    translationScene3d(pt_scene,anticentre);
+    multiplicationMatrice3d(pt_scene->descendant,m0,mx);
+    multiplicationMatrice3d(pt_scene->descendant,m0,my);
+    multiplicationMatrice3d(pt_scene->descendant,m0,mz);
+    translationScene3d(pt_scene,centre);
+
+    free(anticentre);
+
+
 }
 
 void dessinerSceneR(t_scene3d* rektos, double mat[4][4], t_objet3d *aremplir)
 {
     if(rektos!=NULL) {
         double mat2[4][4];
-        t_objet3d *ajouter = copierObjet3d(rektos->objet);
+        t_objet3d *ajouter = objet_vide();
+        ajouter = copierObjet3d(rektos->objet);
 
         multiplicationMatrice3d(mat2, rektos->descendant, mat);
         transformationObjet3d(ajouter,mat2);
         composerObjet3d(aremplir, ajouter);
 
-
-        libererObjet3d(ajouter);
-
-
-        dessinerSceneR(rektos->pt_fils,mat2,aremplir);
-        dessinerSceneR(rektos->pt_suiv,mat,aremplir);
+        if(rektos->pt_fils!=NULL) {
+            dessinerSceneR(rektos->pt_fils,mat2,aremplir);
     }
+    if(rektos->pt_suiv!=NULL) {
+    dessinerSceneR(rektos->pt_suiv,mat,aremplir);
+    }
+
+    }
+
+
+
 }
 
 
