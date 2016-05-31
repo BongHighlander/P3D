@@ -32,7 +32,7 @@ t_objet3d* objet_vide();
 t_objet3d* camera(); // == objet vide
 
 // retourne un object alloue mais avec une liste de 12 faces centrees sur (0,0,0) de dimension lx,ly,lz
-t_objet3d* parallelepipede(double lx, double ly, double lz);
+t_objet3d* parallelepipede(double lx, double ly, double lz, Uint32 couleur);
 // retourne un object alloue mais avec une liste de faces centrees sur (0,0,0) de rayon r avec nlat latitudes et nlong longitudes
 t_objet3d* sphere(double r, double nlat, double nlong);
 // retourne un object alloue mais avec une liste de faces centrees sur (0,0,0) de rayon r avec nlat latitudes et nlong longitudes, prend des couleurs rouges et blanches sur des carres adjacents, cf google

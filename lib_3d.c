@@ -70,6 +70,7 @@ t_triangle3d *copierTriangle3d(t_triangle3d *t)
 	n = definirTriangle3d(n0,n1,n2);
 
 
+
 	return n;
 
 }

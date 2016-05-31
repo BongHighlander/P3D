@@ -52,7 +52,7 @@ t_objet3d *camera()
 	return objet_vide();
 }
 
-t_objet3d* parallelepipede(double lx, double ly, double lz)
+t_objet3d* parallelepipede(double lx, double ly, double lz, Uint32 couleur)
 {
 
 	t_point3d *p0,*p1,*p2,*p3,*p4,*p5,*p6,*p7;
@@ -69,23 +69,23 @@ t_objet3d* parallelepipede(double lx, double ly, double lz)
 
 	o1 = objet_vide();
 
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p0,p1,p2)),ROUGEC));
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p1,p2,p3)),ROUGEF));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p0,p1,p2)),couleur));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p1,p2,p3)),couleur));
 
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p4,p5,p6)),BLEUC));
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p5,p6,p7)),BLEUF));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p4,p5,p6)),couleur));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p5,p6,p7)),couleur));
 
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p2,p3,p6)),BLANC));
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p3,p6,p7)),PALEC));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p2,p3,p6)),couleur));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p3,p6,p7)),couleur));
 
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p0,p1,p4)),GRISC));
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p1,p4,p5)),GRISF));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p0,p1,p4)),couleur));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p1,p4,p5)),couleur));
 
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p0,p2,p4)),JAUNEC));
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p2,p4,p6)),JAUNEF));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p0,p2,p4)),couleur));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p2,p4,p6)),couleur));
 
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p1,p3,p5)),ROSEC));
-	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p3,p5,p7)),ROSEF));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p1,p3,p5)),couleur));
+	__insere_tete(o1,__cree_maillon(copierTriangle3d(definirTriangle3d(p3,p5,p7)),couleur));
 
 	free(p0);
 	free(p1);
@@ -176,8 +176,8 @@ t_objet3d* sphere_amiga(double r, double nlat, double nlong)
             __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(definirTriangle3d(corps[i-1][j-1],corps[i-1][j],corps[i][j-1])),ROUGEC*((j+i)%2)+BLANC*((i+j+1)%2)));
             __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(definirTriangle3d(corps[i][j],corps[i][j-1],corps[i-1][j])),ROUGEC*((i+j)%2)+BLANC*((i+j+1)%2)));
         }
-        __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(definirTriangle3d(corps[i-1][(int)(nlong-1)],corps[i-1][0],corps[i][(int)(nlong-1)])),ROUGEC*((i+j)%2)+BLANC*((i+j+1)%2)));
-        __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(definirTriangle3d(corps[i][0],corps[i][(int)(nlong-1)],corps[i-1][0])),ROUGEC*((i+(int)(nlat-2))%2)+BLANC*((i+(int)(nlat-2)+1)%2)));
+        __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(definirTriangle3d(corps[i-1][(int)(nlong-1)],corps[i][0],corps[i][(int)(nlong-1)])),ROUGEC*((i+j)%2)+BLANC*((i+j+1)%2)));
+        __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(definirTriangle3d(corps[i][0],corps[i-1][(int)(nlong-1)],corps[i-1][0])),BLANC*((i+(int)(nlat-2))%2)+ROUGEC*((i+(int)(nlat-2)+1)%2)));
 	}
 	for(j=1;j<nlong;j++) {
         __insere_tete(pt_objet,__cree_maillon(copierTriangle3d(definirTriangle3d(antisommet,corps[0][j],corps[0][j-1])),ROUGEC*(j%2)+BLANC*((j+1)%2)));
